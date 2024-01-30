@@ -1,5 +1,4 @@
-Name: aman izzat ambran, ID: A9999, Gender: male, Birthdate: 13/01/2002, Address: no 234234 aradfas 124124 asdf af, Phone: 012331242421
-Name: Gender:, ID: male,, Gender: Birthdate:, Birthdate: 12303131,, Address: Address:, Phone: am
-Name: 4124124, ID: Name:, Gender: aman, Birthdate: izzat,, Address: ID:, Phone: A011123,
-Name: Birthdate:, ID: 4124124,, Gender: Address:, Birthdate: 4141dfasdf, Address: fwef423,, Phone: Phone:
-Name: Name:, ID: muqri,, Gender: ID:, Birthdate: 4214124,, Address: Gender:, Phone: lelake,
+alif hensem,0-2421412,lelaki,124/4214/412421,nio hriri 1412,2451513
+MUHAMAD AMAN IZZAT BIN AMBRAN,03040502050607,male,12/02/3003,no 412421 lorong anrnajrk asf,0123455667
+muqri hensem,03040506010202,female,41/23/4412,taman bahtera perak,01244513513
+yusra,12412421,male,12/3421/53425,no r1241241 rarfa,45814112

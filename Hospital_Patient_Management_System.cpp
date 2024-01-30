@@ -12,25 +12,28 @@
 using namespace std;
 
 // Data structures
-struct Patient {
-    string name;
-    string id;
-    string gender;
-    string dob;
-    string address;
-    string phone;
-    Patient *next;
+struct Patient
+{
+   string name;
+   string id;
+   string gender;
+   string dob;
+   string address;
+   string phone;
+   Patient *next;
 };
 
-struct Appointment {
-    string patientId;
-    string date;
-    string time;
+struct Appointment
+{
+   string patientId;
+   string date;
+   string time;
 };
 
-struct MedicalRecord {
-    string patientId;
-    string record;
+struct MedicalRecord
+{
+   string patientId;
+   string record;
 };
 
 Patient *head = NULL;
@@ -51,9 +54,20 @@ void readPatientFile()
    
    if (infile.is_open())
    {
-      string name, id, gender, dob, address, phone;
-      while (infile >> name >> id >> gender >> dob >> address >> phone)
+      string line;
+      while (getline(infile, line))
       {
+         stringstream ss(line);
+         string name, id, gender, dob, address, phone;
+
+         // Assuming each field is separated by a comma
+         getline(ss, name, ',');
+         getline(ss, id, ',');
+         getline(ss, gender, ',');
+         getline(ss, dob, ',');
+         getline(ss, address, ',');
+         getline(ss, phone);
+
          Patient newPatient = {name, id, gender, dob, address, phone, NULL};
          addPatientToList(newPatient);
       }
@@ -64,19 +78,20 @@ void readPatientFile()
 }
 
 // Function to write the linked list to the file
-void writeListToFile() {
+void writeListToFile()
+   {
    ofstream outfile("patient_try.txt");
    if (outfile.is_open()) 
    {
       Patient *cur = head;
       while (cur != NULL)
       {
-         outfile << "Name: " << cur->name << ", "
-                 << "ID: " << cur->id << ", " 
-                 << "Gender: " << cur->gender << ", "
-                 << "Birthdate: " << cur->dob << ", "
-                 << "Address: " << cur->address << ", "
-                 << "Phone: " << cur-> phone << endl;
+         outfile << cur->name << ","
+                 << cur->id << "," 
+                 << cur->gender << ","
+                 << cur->dob << ","
+                 << cur->address << ","
+                 << cur->phone << endl;
          cur = cur->next;
       }
       outfile.close();
@@ -86,32 +101,34 @@ void writeListToFile() {
 }
 
 // Function Add new patient to patient file
-void addPatientToFile() {
-    cout << "\n---Add New Patient To The List---\n";
-    cin.ignore();
-    Patient newPatient;
-    cout << "Enter patient name: ";
-    getline(cin, newPatient.name);
-    cout << "Enter patient ID: ";
-    cin >> newPatient.id;
-    cout << "Enter patient gender: ";
-    cin >> newPatient.gender;
-    cout << "Enter patient date of birth: ";
-    cin >> newPatient.dob;
-    cout << "Enter patient address: ";
-    cin.ignore();
-    getline(cin, newPatient.address);
-    cout << "Enter patient phone number: ";
-    cin >> newPatient.phone;
+void addPatientToFile()
+   {
+   cout << "\n---Add New Patient To The List---\n";
+   cin.ignore();
+   Patient newPatient;
+   cout << "Enter patient name: ";
+   getline(cin, newPatient.name);
+   cout << "Enter patient ID: ";
+   cin >> newPatient.id;
+   cout << "Enter patient gender (Male or Female): ";
+   cin >> newPatient.gender;
+   cout << "Enter patient date of birth (dd/mm/yyyy): ";
+   cin >> newPatient.dob;
+   cout << "Enter patient address: ";
+   cin.ignore();
+   getline(cin, newPatient.address);
+   cout << "Enter patient phone number: ";
+   cin >> newPatient.phone;
 
-    addPatientToList(newPatient);
-    writeListToFile();
-    cout << "-#-Patient Record Added Successfully-#-\n";
+   addPatientToList(newPatient);
+   writeListToFile();
+   cout << "-#-Patient Record Added Successfully-#-\n";
 }
 
 // Display all patient records from the linked list
-void displayPatientRecords()
+void displayPatientRecord()
 {
+   cout << "\n---Patient Record---\n";
    Patient *cur = head;
    while (cur != NULL)
    {
@@ -123,6 +140,24 @@ void displayPatientRecords()
            << "Phone: " << cur-> phone << endl;
            cur = cur->next;
     }
+}
+
+// Edit patient record
+void editPatientRecord()
+{
+   cout << "In progress.\n";
+}
+
+// Delete patient from patient list
+void deletePatientFromRecord()
+{
+   cout << "In progress.\n";
+}
+
+// Reset patient list
+void erasePatientRecord()
+{
+   cout << "In progress.\n";
 }
 
 // Linked list for appointments
@@ -154,7 +189,7 @@ void sortPatientRecords();
 void searchForPatient();
 void viewAndUpdateAppointments();
 void enterAndAccessMedicalRecords();
-void displayPatientRecords();
+void displayPatientRecord();
 void displayAppointmentSchedule();
 void addEmergencyCase();
 void processEmergencyCases();
@@ -180,7 +215,32 @@ int main() {
                 //schedulePatientAppointment();
                 break;
             case 3:
-                //viewAndUpdatePatientInformation();
+                displayPatientRecord();
+                cout << "---Please Select Your Choice---\n";
+                cout << "1. Edit Patient Record.\n";
+                cout << "2. Delete Patient From Record.\n";
+                cout << "3. Erase From Record.\n";
+                cout << "4. Back To Main Menu.\n";
+                cout << "Your Choice: ";
+                int c3choice;
+                cin >> c3choice;
+                
+                switch (c3choice)
+                {
+                  case 1:
+                     editPatientRecord();
+                     break;
+                  case 2:
+                     deletePatientFromRecord();
+                     break;
+                  case 3:
+                     erasePatientRecord();
+                     break;
+                  case 4:
+                     break;
+                  default:
+                     cout << "Invalid choice. Please try again.\n";
+               }
                 break;
             case 4:
                 //sortPatientRecords();
@@ -195,7 +255,7 @@ int main() {
                 //enterAndAccessMedicalRecords();
                 break;
             case 8:
-                displayPatientRecords();
+                displayPatientRecord();
                 break;
             case 9:
                 //displayAppointmentSchedule();
@@ -207,7 +267,7 @@ int main() {
                 //processEmergencyCases();
                 break;
             case 12:
-                cout << "Exiting the system. Goodbye!" << endl;
+                cout << "---Exiting the system. Goodbye!---" << endl;
                 break;
             default:
                 cout << "Invalid choice. Please try again." << endl;
@@ -216,7 +276,6 @@ int main() {
 
     } while (choice != 12);
 
-    //savePatientsToFile();
     //saveAppointmentsToFile();
     //saveMedicalRecordsToFile();
 
@@ -225,7 +284,7 @@ int main() {
 
 // Function definitions...
 void displayMainMenu() {
-    cout << "Main Menu" << endl;
+    cout << "\n---Main Menu---" << endl;
     cout << "Welcome to Budiman Private Hospital Patient Management System." << endl;
     cout << "Please select your choice:" << endl;
     cout << "1. Register a new patient." << endl;
