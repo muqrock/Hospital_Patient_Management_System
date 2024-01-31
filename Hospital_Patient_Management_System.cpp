@@ -286,7 +286,7 @@ void searchForPatient();
 void viewAndUpdateAppointments();
 void enterAndAccessMedicalRecords();
 void displayPatientRecord();
-void displayAppointmentSchedule();
+void displayAppointmentSchedule(const queue<Appointment>& appointmentQueue);
 void addEmergencyCase();
 void processEmergencyCases();
 
@@ -354,7 +354,7 @@ int main() {
                 displayPatientRecord();
                 break;
             case 9:
-                //displayAppointmentSchedule();
+                displayAppointmentSchedule(appointmentQueue);
                 break;
             case 10:
                 //addEmergencyCase();
