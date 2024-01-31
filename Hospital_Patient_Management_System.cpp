@@ -50,7 +50,7 @@ void addPatientToList(const Patient& newPatient)
 void readPatientFile()
 {
    ifstream infile;
-   infile.open("patient_try.txt");
+   infile.open("patient_file.txt");
    
    if (infile.is_open())
    {
@@ -80,7 +80,7 @@ void readPatientFile()
 // Function to write the linked list to the file
 void writeListToFile()
    {
-   ofstream outfile("patient_try.txt");
+   ofstream outfile("patient_file.txt");
    if (outfile.is_open()) 
    {
       Patient *cur = head;
@@ -130,6 +130,10 @@ void displayPatientRecord()
 {
    cout << "\n---Patient Record---\n";
    Patient *cur = head;
+   if (cur == NULL)
+      cout << "The list is empty. Please add patient to the list.\n";
+   else
+   {
    while (cur != NULL)
    {
       cout << "Name: " << cur->name << ", "
@@ -139,7 +143,8 @@ void displayPatientRecord()
            << "Address: " << cur->address << ", "
            << "Phone: " << cur-> phone << endl;
            cur = cur->next;
-    }
+   }
+   }
 }
 
 // Edit patient record
@@ -151,7 +156,70 @@ void editPatientRecord()
 // Delete patient from patient list
 void deletePatientFromRecord()
 {
-   cout << "In progress.\n";
+   string patientID;
+   cout << "Enter patient ID to delete: ";
+   cin >> patientID;
+   
+   // Remove patient from linked list
+   Patient *cur = head, *prev = NULL;
+   while (cur != NULL && cur->id != patientID)
+   {
+      prev = cur;
+      cur = cur->next;
+   }
+   
+   if (cur == NULL)
+   {
+      cout << "!!!Patient Not Found In List!!!\n";
+      return;
+   }
+   
+   // If the patient is found, unlink the node from the linked list
+   if (prev == NULL)
+       head = cur->next;
+   else
+      prev->next = cur->next;
+
+   delete cur;  // Free memory
+
+   ifstream infile("patient_file.txt");
+   ofstream tempFile("temp.txt");
+   string line;
+   bool found = false;
+
+   if (infile.is_open() && tempFile.is_open())
+   {
+      while (getline(infile, line))
+      {
+         // Assuming patient ID is the second field in the line
+         stringstream ss(line);
+         string temp;
+         getline(ss, temp, ','); // Skip name
+         getline(ss, temp, ',');
+         
+         if (temp != patientID) 
+            tempFile << line << endl;
+         else
+            found = true;
+      }
+      infile.close();
+      tempFile.close();
+
+      // Replace old patient file with new file if patient is found
+      if (found)
+      {
+         remove("patient_file.txt");
+         rename("temp.txt", "patient_file.txt");
+         cout << "-#-Patient Record Deleted Successfully-#-\n";
+      }
+      else
+      {
+         cout << "!!!Patient Not Found!!!\n";
+         remove("temp.txt");
+      }
+   }
+   else
+      cout << "!!!Error Opening File!!!\n";
 }
 
 // Reset patient list
