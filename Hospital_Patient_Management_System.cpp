@@ -228,6 +228,34 @@ void erasePatientRecord()
    cout << "In progress.\n";
 }
 
+//NO 9 - Display appointment schedule.
+void displayAppointmentSchedule(const queue<Appointment>& appointmentQueue) {
+    cout << "\n---Appointment Schedule---\n";
+
+    // Check if the appointment queue is empty
+    if (appointmentQueue.empty()) {
+        cout << "There are no scheduled appointments.\n";
+        return;
+    }
+
+    // Print a header for the schedule
+    cout << "No. | Patient ID | Date | Time\n";
+    cout << "----|------------|------|-------\n";
+
+    int count = 1;  // Keep track of the appointment number
+
+    // Iterate through the appointment queue using a temporary queue
+    queue<Appointment> tempQueue = appointmentQueue;
+    while (!tempQueue.empty()) {
+        Appointment appointment = tempQueue.front();
+        tempQueue.pop();
+
+        cout << count++ << " | " << appointment.patientId << " | "
+             << appointment.date << " | " << appointment.time << endl;
+    }
+}
+
+
 // Linked list for appointments
 list<Appointment> appointmentList;
 
