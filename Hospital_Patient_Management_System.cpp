@@ -154,7 +154,7 @@ void editPatientRecord()
 }
 
 // Delete patient from patient list
-void deletePatientFromRecord()
+void deletePatientFromRecord(queue<Appointment>& appointmentQueue)
 {
    string patientID;
    cout << "Enter patient ID to delete: ";
@@ -226,6 +226,44 @@ void deletePatientFromRecord()
 void erasePatientRecord()
 {
    cout << "In progress.\n";
+}
+
+// Function prototype for writing appointment to file
+void writeAppointmentToFile(const Appointment& newAppointment);
+
+//NO 2 - Schedule a patient appointment
+void schedulePatientAppointment(queue<Appointment>& appointmentQueue) {
+    cout << "---Schedule a Patient Appointment---\n";
+    
+    // Collect appointment details from the user
+    Appointment newAppointment;
+    cout << "Enter patient ID: ";
+    cin >> newAppointment.patientId;
+    cout << "Enter appointment date (dd/mm/yyyy): ";
+    cin >> newAppointment.date;
+    cout << "Enter appointment time: ";
+    cin >> newAppointment.time;
+
+    // Enqueue the appointment into the appointmentQueue
+    appointmentQueue.push(newAppointment);
+
+    // Write appointment to file
+    writeAppointmentToFile(newAppointment);
+    
+    cout << "-#-Appointment Scheduled Successfully-#-\n";
+}
+
+// Function to write the appointment to the file
+void writeAppointmentToFile(const Appointment& newAppointment) {
+    ofstream outfile("appointment.txt", ios::app); // Open file in append mode
+    if (outfile.is_open()) {
+        outfile << newAppointment.patientId << ","
+                << newAppointment.date << "," 
+                << newAppointment.time << endl;
+        outfile.close();
+    } else {
+        cout << "!!!Error To Write Appointment!!!\n";
+    }
 }
 
 //NO 9 - Display appointment schedule.
@@ -308,7 +346,7 @@ int main() {
                 addPatientToFile();
                 break;
             case 2:
-                //schedulePatientAppointment();
+                schedulePatientAppointment(appointmentQueue);
                 break;
             case 3:
                 displayPatientRecord();
@@ -327,7 +365,7 @@ int main() {
                      editPatientRecord();
                      break;
                   case 2:
-                     deletePatientFromRecord();
+                     deletePatientFromRecord(appointmentQueue);
                      break;
                   case 3:
                      erasePatientRecord();
