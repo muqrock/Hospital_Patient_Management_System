@@ -147,10 +147,103 @@ void displayPatientRecord()
    }
 }
 
+// Update patient file after edit
+void updatePatientFile()
+{
+   ofstream outfile("patients.txt");
+   Patient *cur = head;
+   while (cur != NULL) 
+   {
+      outfile << cur->name << ","
+              << cur->id << ","
+              << cur->gender << ","
+              << cur->dob << ","
+              << cur->address << ","
+              << cur->phone << endl;
+      cur = cur->next;
+   }
+   outfile.close();
+   cout << "-#-Patient Record Updated Successfully-#-" << endl;
+}
+
 // Edit patient record
 void editPatientRecord()
 {
-   cout << "In progress.\n";
+   cout << "\n---Edit Patient Record---\n";
+   string patientID;
+   cout << "Enter patient ID to edit: ";
+   cin >> patientID;
+
+   // Find the patient in the linked list
+   Patient *cur = head;
+   bool found = false;
+   while (cur != NULL)
+   {
+      if (cur->id == patientID) 
+      {
+         found = true;
+         break;
+      }
+      cur = cur->next;
+   }
+
+   if (!found)
+   {
+      cout << "Patient not found." << endl;
+      return;
+   }
+
+   // Editing menu
+   cout << "\n---Edit this patient---\n";
+   cout << "Name: " << cur->name << endl
+        << "ID: " << cur->id << endl
+        << "Gender: " << cur->gender << endl
+        << "Date of Birth: " << cur->dob << endl
+        << "Address: " << cur->address << endl
+        << "Phone: " << cur->phone << endl;
+   cout << "What would you like to edit?" << endl;
+   cout << "1. Name" << endl;
+   cout << "2. ID" << endl;
+   cout << "3. Gender" << endl;
+   cout << "4. Date of Birth" << endl;
+   cout << "5. Address" << endl;
+   cout << "6. Phone" << endl;
+   cout << "7. Back To Menu" << endl;
+   cout << "Enter choice: ";
+   int editchoice;
+   cin >> editchoice;
+   cin.ignore(); // Clear the newline character from the input buffer
+   switch (editchoice)
+   {
+      case 1:
+         cout << "Enter new name: ";
+         getline(cin, cur->name);
+         break;
+      case 2:
+         cout << "Enter new ID: ";
+         cin >> cur->id;
+         break;  
+      case 3:
+         cout << "Enter new gender (Male or Female): ";
+         cin >> cur->gender;
+         break;
+      case 4:
+         cout << "Enter new date of birth (dd/mm/yyyy): ";
+         cin >> cur->dob;
+         break;
+      case 5:
+         cout << "Enter new address: ";
+         getline(cin, cur->address);
+         break;
+      case 6:
+         cout << "Enter new phone: ";
+         cin >> cur->phone;
+         break;
+      case 7:
+         break;
+      default:
+         cout << "Invalid choice. Please try again." << endl;
+   }
 }
 
 // Delete patient from patient list
@@ -371,10 +464,10 @@ int main() {
                 schedulePatientAppointment(appointmentQueue);
                 break;
             case 3:
-                displayPatientRecord();
                 int c3choice;
                 do
                 {
+                  displayPatientRecord();
                   cout << "---Please Select Your Choice---\n";
                   cout << "1. Edit Patient Record.\n";
                   cout << "2. Delete Patient From Record.\n";
@@ -387,6 +480,7 @@ int main() {
                   {
                      case 1:
                         editPatientRecord();
+                        updatePatientFile();
                         break;
                      case 2:
                         deletePatientFromRecord(appointmentQueue);
