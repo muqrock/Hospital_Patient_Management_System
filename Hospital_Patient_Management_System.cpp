@@ -50,7 +50,7 @@ void addPatientToList(const Patient& newPatient)
 void readPatientFile()
 {
    ifstream infile;
-   infile.open("patient_file.txt");
+   infile.open("patients.txt");
    
    if (infile.is_open())
    {
@@ -80,7 +80,7 @@ void readPatientFile()
 // Function to write the linked list to the file
 void writeListToFile()
    {
-   ofstream outfile("patient_file.txt");
+   ofstream outfile("patients.txt");
    if (outfile.is_open()) 
    {
       Patient *cur = head;
@@ -182,7 +182,7 @@ void deletePatientFromRecord(queue<Appointment>& appointmentQueue)
 
    delete cur;  // Free memory
 
-   ifstream infile("patient_file.txt");
+   ifstream infile("patients.txt");
    ofstream tempFile("temp.txt");
    string line;
    bool found = false;
@@ -208,8 +208,8 @@ void deletePatientFromRecord(queue<Appointment>& appointmentQueue)
       // Replace old patient file with new file if patient is found
       if (found)
       {
-         remove("patient_file.txt");
-         rename("temp.txt", "patient_file.txt");
+         remove("patients.txt");
+         rename("temp.txt", "patients.txt");
          cout << "-#-Patient Record Deleted Successfully-#-\n";
       }
       else
