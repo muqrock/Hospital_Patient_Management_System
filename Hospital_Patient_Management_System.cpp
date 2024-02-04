@@ -77,7 +77,7 @@ void readPatientFile()
       cout << "!!!Error To Read Patient Record!!!\n";
 }
 
-// Function to write the linked list to the file
+// Write the linked list to the file
 void writeListToFile()
    {
    ofstream outfile("patients.txt");
@@ -100,7 +100,7 @@ void writeListToFile()
       cout << "!!!Error To Write Patient Record!!!\n";
 }
 
-// Function Add new patient to patient file
+// Add new patient to patient file
 void addPatientToFile()
    {
    cout << "\n---Add New Patient To The List---\n";
@@ -225,7 +225,29 @@ void deletePatientFromRecord(queue<Appointment>& appointmentQueue)
 // Reset patient list
 void erasePatientRecord()
 {
-   cout << "In progress.\n";
+   cout << "\n---Erasing All Patient Records---\n";
+    
+   // Delete all patient records in the linked list
+   Patient *cur = head;
+   while (head != NULL)
+   {
+      cur = head; // Get the first node
+      head = head->next; // Move head to the next node
+      delete cur; // Delete the current node
+   }
+    
+   // Ensure the head is null after deletion of all nodes
+   head = NULL;
+    
+   // Clear the patient records file
+   ofstream outfile("patients.txt", ios::trunc); // Open file in truncate mode to clear it
+   if (outfile.is_open())
+   {
+      outfile.close(); // Close the file after clearing
+      cout << "-#-All Patient Records Erased Successfully-#-\n";
+   }
+   else
+      cout << "!!!Error To Clear Patient Records File!!!\n";
 }
 
 // Function prototype for writing appointment to file
@@ -350,32 +372,36 @@ int main() {
                 break;
             case 3:
                 displayPatientRecord();
-                cout << "---Please Select Your Choice---\n";
-                cout << "1. Edit Patient Record.\n";
-                cout << "2. Delete Patient From Record.\n";
-                cout << "3. Erase From Record.\n";
-                cout << "4. Back To Main Menu.\n";
-                cout << "Your Choice: ";
                 int c3choice;
-                cin >> c3choice;
-                
-                switch (c3choice)
+                do
                 {
-                  case 1:
-                     editPatientRecord();
-                     break;
-                  case 2:
-                     deletePatientFromRecord(appointmentQueue);
-                     break;
-                  case 3:
-                     erasePatientRecord();
-                     break;
-                  case 4:
-                     break;
-                  default:
-                     cout << "Invalid choice. Please try again.\n";
-               }
-                break;
+                  cout << "---Please Select Your Choice---\n";
+                  cout << "1. Edit Patient Record.\n";
+                  cout << "2. Delete Patient From Record.\n";
+                  cout << "3. Erase Patient Record.\n";
+                  cout << "4. Back To Main Menu.\n";
+                  cout << "Your Choice: ";
+                  cin >> c3choice;
+                
+                  switch (c3choice)
+                  {
+                     case 1:
+                        editPatientRecord();
+                        break;
+                     case 2:
+                        deletePatientFromRecord(appointmentQueue);
+                        break;
+                     case 3:
+                        erasePatientRecord();
+                        break;
+                     case 4:
+                        break;
+                     default:
+                        cout << "Invalid choice. Please try again.\n";
+                        continue;
+                  }
+               } while (c3choice != 4);
+               break;
             case 4:
                 //sortPatientRecords();
                 break;
