@@ -1,13 +1,16 @@
+/*Budiman Private Hospital Patient Management System
+If you have error running this program, please use
+g++ generic compiler for jGRASP.
+If problem persist, you can use online c++ compiler.*/
+
 #include <iostream>
 #include <cctype>
 #include <queue>
-#include <stack>
-#include <cstddef>  // Add this header for nullptr
+#include <cstddef>  // Add this header for NULL
 #include <fstream>
 #include <string>
 #include <sstream>
 #include <list>
-#include <queue>
 #include <algorithm> // For swap
 
 using namespace std;
@@ -419,6 +422,38 @@ void sortPatientRecord()
    displayPatientRecord();
 }
 
+// No.5 Search for patient from patient record
+void searchPatient()
+{
+   cout << "\n---Searching For Patient---\n";
+   string searchTerm;
+   cout << "Enter patient name or ID: ";
+   cin.ignore(); // Ignore newline left in the input buffer
+   getline(cin, searchTerm); // Use getline to allow spaces in names
+
+   bool found = false;
+   Patient *cur = head;
+   cout << "\n-#-Search Results-#-\n";
+   while (cur != NULL) 
+   {
+      if (cur->name.find(searchTerm) != string::npos || cur->id.find(searchTerm) != string::npos)
+      {
+         // Display matching patient
+         cout << "Name: " << cur->name << ", "
+              << "ID: " << cur->id << ", "
+              << "Gender: " << cur->gender << ", "
+              << "Birthdate: " << cur->dob << ", "
+              << "Address: " << cur->address << ", "
+              << "Phone: " << cur->phone << endl;
+         found = true;
+      }
+      cur = cur->next;
+   }
+
+   if (!found)
+      cout << "---No Patient Found From Record---\n";
+}
+
 // Function prototype for writing appointment to file
 void writeAppointmentToFile(const Appointment& newAppointment);
 
@@ -576,7 +611,7 @@ int main() {
                 sortPatientRecord();
                 break;
             case 5:
-                //searchForPatient();
+                searchPatient();
                 break;
             case 6:
                 //viewAndUpdateAppointments();
