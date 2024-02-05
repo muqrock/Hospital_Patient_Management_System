@@ -40,6 +40,13 @@ struct MedicalRecord
    string record;
 };
 
+struct EmergencyCase {
+    string name;
+    string description;
+    int priority;
+    EmergencyCase* next;
+};
+
 Patient *head = NULL;
 
 // No.1 Add new patient to linked list
@@ -625,6 +632,125 @@ void viewAndUpdateAppointments(queue<Appointment>& appointmentQueue) {
     } while (choice != 4);
 }
 
+void addEmergencyCase(EmergencyCase*& head) {
+    EmergencyCase* newCase = new EmergencyCase;
+    cin.ignore();
+
+    cout << "Enter patient name: ";
+    getline(cin, newCase->name);
+
+    cout << "Enter description of the emergency: ";
+    getline(cin, newCase->description);
+
+    cout << "Enter priority (1-10): ";
+    cin >> newCase->priority;
+
+    newCase->next = NULL;
+
+    // Insert into the linked list based on priority
+    if (!head || newCase->priority > head->priority) {
+        newCase->next = head;
+        head = newCase;
+    } else {
+        EmergencyCase* current = head;
+        while (current->next && newCase->priority <= current->next->priority) {
+            current = current->next;
+        }
+        newCase->next = current->next;
+        current->next = newCase;
+    }
+
+    cout << "Emergency case added successfully.\n";
+}
+
+void processEmergencyCases(EmergencyCase*& head) {
+    if (!head) {
+        cout << "No emergency cases to process.\n";
+        return;
+    }
+
+    EmergencyCase* current = head;
+
+    cout << "Processing emergency cases:\n";
+    cout << "Patient: " << current->name << ", Description: " << current->description << ", Priority: " << current->priority << "\n";
+
+    head = current->next;
+    delete current;
+
+    cout << "Emergency case processed successfully.\n";
+}
+
+void displayEmergencyCases(EmergencyCase* head) {
+    if (!head) {
+        cout << "No emergency cases to display.\n";
+        return;
+    }
+
+    cout << "Emergency Cases:\n";
+    while (head) {
+        cout << "Patient: " << head->name << ", Description: " << head->description << ", Priority: " << head->priority << "\n";
+        head = head->next;
+    }
+}
+
+
+
+void saveToFile(EmergencyCase* head) {
+    ofstream outfile("emergency_cases.txt");
+
+    if (outfile.is_open()) {
+        while (head) {
+            outfile << head->name << "," << head->description << "," << head->priority << "\n";
+            head = head->next;
+        }
+        outfile.close();
+        cout << "Emergency cases saved to file.\n";
+    } else {
+        cout << "Unable to open file for writing.\n";
+    }
+}
+
+void loadFromFile(EmergencyCase*& head) {
+    ifstream infile("emergency_cases.txt");
+
+    if (infile.is_open()) {
+        string line;
+        while (getline(infile, line)) {
+            stringstream ss(line);
+            string name, description;
+            int priority;
+
+            getline(ss, name, ',');
+            getline(ss, description, ',');
+            ss >> priority;
+
+            EmergencyCase* newCase = new EmergencyCase{ name, description, priority, NULL };
+
+            // Insert into the linked list based on priority
+            if (!head || newCase->priority > head->priority) {
+                newCase->next = head;
+                head = newCase;
+            } else {
+                EmergencyCase* current = head;
+                while (current->next && newCase->priority <= current->next->priority) {
+                    current = current->next;
+                }
+                newCase->next = current->next;
+                current->next = newCase;
+            }
+        }
+        infile.close();
+        cout << "Emergency cases loaded from file.\n";
+    } else {
+        // Create the file if it doesn't exist
+        ofstream outfile("emergency_cases.txt");
+        outfile.close();
+
+        cout << "No existing file found. Starting with an empty list.\n";
+    }
+}
+
+
 
 
 // Linked list for appointments
@@ -666,6 +792,8 @@ int main() {
     readPatientFile();
     loadAppointmentsFromFile(appointmentQueue);
     //loadMedicalRecordsFromFile();
+    EmergencyCase* emergencyQueue = NULL;
+    loadFromFile(emergencyQueue);
 
     int choice;
 
@@ -733,10 +861,10 @@ int main() {
                 displayAppointmentSchedule(appointmentQueue);
                 break;
             case 10:
-                //addEmergencyCase();
+                addEmergencyCase(emergencyQueue);
                 break;
             case 11:
-                //processEmergencyCases();
+                processEmergencyCases(emergencyQueue);
                 break;
             case 12:
                 cout << "---Exiting the system. Goodbye!---" << endl;
