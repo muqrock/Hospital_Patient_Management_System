@@ -681,6 +681,87 @@ void viewAndUpdateAppointments(queue<Appointment>& appointmentQueue) {
     } while (choice != 4);
 }
 
+//no7
+void accessMedicalRecords() {
+    ifstream infile("medical_records.txt");
+    if (!infile.is_open()) {
+        cout << "Error: Unable to open medical records file." << endl;
+        return;
+    }
+
+    string line;
+    cout << "\n---Medical Records---" << endl;
+    while (getline(infile, line)) {
+        istringstream iss(line);
+        string patientID, record;
+        if (getline(iss, patientID, ',') && getline(iss, record)) {
+            cout << "Patient ID: " << patientID << ", Record: " << record << endl;
+        } else {
+            cout << "Error: Invalid medical record format." << endl;
+        }
+    }
+
+    infile.close();
+}
+
+void addMedicalRecordToFile(const MedicalRecord& newRecord) {
+    ofstream outfile("medical_records.txt", ios::app); // Open file in append mode
+    if (outfile.is_open()) {
+        outfile << newRecord.patientId << "," << newRecord.record << endl;
+        outfile.close();
+        cout << "Medical record added successfully." << endl;
+    } else {
+        cout << "Error: Unable to write to medical records file." << endl;
+    }
+}
+
+void enterMedicalRecord() {
+    // Collect medical record details from the user
+    MedicalRecord newRecord;
+    cout << "Enter patient ID: ";
+    cin >> newRecord.patientId;
+    cin.ignore(); // Clear the newline character from the input buffer
+    cout << "Enter medical record: ";
+    getline(cin, newRecord.record);
+
+    // Append the new medical record to the file
+    addMedicalRecordToFile(newRecord);
+}
+
+
+//no 7
+void enterAndAccessMedicalRecords() {
+    int choice;
+    do {
+        cout << "\n---Enter and Access Medical Records---" << endl;
+        cout << "1. Enter Medical Record" << endl;
+        cout << "2. Access Medical Records" << endl;
+        cout << "3. Back to Main Menu" << endl;
+        cout << "Your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                // Function call to enter a new medical record
+                enterMedicalRecord();
+                break;
+            case 2:
+                // Function call to access medical records
+                accessMedicalRecords();
+                break;
+            case 3:
+                cout << "---Returning to Main Menu---" << endl;
+                break;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+                break;
+        }
+    } while (choice != 3);
+}
+
+
+
+
 void addEmergencyCase(EmergencyCase*& head) {
     EmergencyCase* newCase = new EmergencyCase;
     cin.ignore();
@@ -901,7 +982,7 @@ int main() {
                 viewAndUpdateAppointments(appointmentQueue);
                 break;
             case 7:
-                //enterAndAccessMedicalRecords();
+                enterAndAccessMedicalRecords();
                 break;
             case 8:
                 displayPatientRecord();
