@@ -765,7 +765,7 @@ void displayEmergencyCases(EmergencyCase* head) {
         return;
     }
 
-    cout << "Emergency Cases:\n";
+    cout << "--------|Emergency Cases:|--------\n";
     while (head) {
         cout << "Patient: " << head->name << ", Description: " << head->description << ", Priority: " << head->priority << "\n";
         head = head->next;
@@ -801,7 +801,7 @@ void addEmergencyCase(EmergencyCase*& head) {
         current->next = newCase;
     }
 
-    cout << "Emergency case added successfully.\n";
+    cout << "--------|Emergency case added successfully.|--------\n";
     displayEmergencyCases(head);
 }
 
@@ -895,26 +895,12 @@ queue<Appointment> appointmentQueue;
 priority_queue<Appointment, vector<Appointment>, greater<Appointment>> emergencyQueue;
 
 // Function prototypes
-void loadPatientsFromFile();
-void loadAppointmentsFromFile();
-void loadMedicalRecordsFromFile();
-
-void savePatientsToFile();
-void saveAppointmentsToFile();
-void saveMedicalRecordsToFile();
-
 void displayMainMenu();
-void registerNewPatient();
-void schedulePatientAppointment();
-void viewAndUpdatePatientInformation();
-void sortPatientRecord();
-void searchForPatient();
 void viewAndUpdateAppointments(const queue<Appointment>& appointmentQueue); //
 void enterAndAccessMedicalRecords();
 void displayPatientRecord(); //
 void displayAppointmentSchedule(const queue<Appointment>& appointmentQueue); //
-void addEmergencyCase();
-void processEmergencyCases();
+
 
 int main() {
     // Load patient records from file into the linked list
