@@ -8,6 +8,7 @@
 #include <sstream>
 #include <list>
 #include <queue>
+#include <algorithm> // For swap
 
 using namespace std;
 
@@ -38,7 +39,7 @@ struct MedicalRecord
 
 Patient *head = NULL;
 
-// Add new patient to linked list
+// No.1 Add new patient to linked list
 void addPatientToList(const Patient& newPatient)
 {
    Patient *newNode = new Patient(newPatient);
@@ -46,7 +47,7 @@ void addPatientToList(const Patient& newPatient)
    head = newNode;
 }
 
-// Read patient record from file and add to linked list
+// No.1,3,8 Read patient record from file and add to linked list
 void readPatientFile()
 {
    ifstream infile;
@@ -77,7 +78,7 @@ void readPatientFile()
       cout << "!!!Error To Read Patient Record!!!\n";
 }
 
-// Write the linked list to the file
+// No.1 Write the linked list to the file
 void writeListToFile()
    {
    ofstream outfile("patients.txt");
@@ -100,7 +101,7 @@ void writeListToFile()
       cout << "!!!Error To Write Patient Record!!!\n";
 }
 
-// Add new patient to patient file
+// No.1 Add new patient to patient file
 void addPatientToFile()
    {
    cout << "\n---Add New Patient To The List---\n";
@@ -125,7 +126,7 @@ void addPatientToFile()
    cout << "-#-Patient Record Added Successfully-#-\n";
 }
 
-// Display all patient records from the linked list
+// No.3,8 Display all patient records from the linked list
 void displayPatientRecord()
 {
    cout << "\n---Patient Record---\n";
@@ -147,7 +148,7 @@ void displayPatientRecord()
    }
 }
 
-// Update patient file after edit
+// No.3 Update patient file after edit
 void updatePatientFile()
 {
    ofstream outfile("patients.txt");
@@ -166,7 +167,7 @@ void updatePatientFile()
    cout << "-#-Patient Record Updated Successfully-#-" << endl;
 }
 
-// Edit patient record
+// No.3 Edit patient record
 void editPatientRecord()
 {
    cout << "\n---Edit Patient Record---\n";
@@ -246,7 +247,7 @@ void editPatientRecord()
    }
 }
 
-// Delete patient from patient list
+// No.3 Delete patient from patient list
 void deletePatientFromRecord(queue<Appointment>& appointmentQueue)
 {
    string patientID;
@@ -315,7 +316,7 @@ void deletePatientFromRecord(queue<Appointment>& appointmentQueue)
       cout << "!!!Error Opening File!!!\n";
 }
 
-// Reset patient list
+// No.3 Reset patient list
 void erasePatientRecord()
 {
    cout << "\n---Erasing All Patient Records---\n";
@@ -326,7 +327,7 @@ void erasePatientRecord()
    {
       cur = head; // Get the first node
       head = head->next; // Move head to the next node
-      delete cur; // Delete the current node
+      delete cur; // Delete the cur node
    }
     
    // Ensure the head is null after deletion of all nodes
@@ -341,6 +342,81 @@ void erasePatientRecord()
    }
    else
       cout << "!!!Error To Clear Patient Records File!!!\n";
+}
+
+// No.4 Bubble sort to sort patient record
+void bubbleSortLinkedList(bool byName = true, bool ascending = true)
+{
+   if (head == NULL || head->next == NULL) return; // List is empty or has one element
+
+   bool swapped;
+   Patient *cur;
+   Patient *lastPtr = NULL;
+
+   do
+   {
+      swapped = false;
+      cur = head;
+
+      while (cur->next != lastPtr)
+      {
+         bool condition = byName ?
+            (ascending ? cur->name > cur->next->name : cur->name < cur->next->name) :
+            (ascending ? cur->id > cur->next->id : cur->id < cur->next->id);
+
+         if (condition)
+         {
+            swap(cur->name, cur->next->name);
+            swap(cur->id, cur->next->id);
+            swap(cur->gender, cur->next->gender);
+            swap(cur->dob, cur->next->dob);
+            swap(cur->address, cur->next->address);
+            swap(cur->phone, cur->next->phone);
+            swapped = true;
+         }
+         cur = cur->next;
+      }
+      lastPtr = cur;
+   } while (swapped);
+}
+
+// No.4 Sort patient record
+void sortPatientRecord()
+{
+   // User interface for sort patient record
+   cout << "\n---Sorting Patient List---\n";
+   cout << "1. Sort by patient name in ascending order\n";
+   cout << "2. Sort by patient name in descending order\n";
+   cout << "3. Sort by ID in ascending order\n";
+   cout << "4. Sort by ID in descending order\n";
+   cout << "Choose sorting option: ";
+   int sortchoice;
+   cin >> sortchoice;
+
+   switch (sortchoice)
+   {
+      case 1:
+         cout << "---Sort Patient Record By Name In Ascending Order---\n";
+         bubbleSortLinkedList(true, true);
+         break;
+      case 2:
+         cout << "---Sort Patient Record By Name In Descending Order---\n";
+         bubbleSortLinkedList(true, false);
+         break;
+      case 3:
+         cout << "---Sort Patient Record By ID In Ascending Order---\n";
+         bubbleSortLinkedList(false, true);
+         break;
+      case 4:
+         cout << "---Sort Patient Record By ID In Descending Order---\n";
+         bubbleSortLinkedList(false, false);
+         break;
+      default:
+         cout << "Invalid choice. Please select a valid option.\n";
+   }
+
+   cout << "-#-Patient records sorted.-#-\n";
+   displayPatientRecord();
 }
 
 // Function prototype for writing appointment to file
@@ -434,7 +510,7 @@ void displayMainMenu();
 void registerNewPatient();
 void schedulePatientAppointment();
 void viewAndUpdatePatientInformation();
-void sortPatientRecords();
+void sortPatientRecord();
 void searchForPatient();
 void viewAndUpdateAppointments();
 void enterAndAccessMedicalRecords();
@@ -497,7 +573,7 @@ int main() {
                } while (c3choice != 4);
                break;
             case 4:
-                //sortPatientRecords();
+                sortPatientRecord();
                 break;
             case 5:
                 //searchForPatient();
@@ -554,5 +630,3 @@ void displayMainMenu() {
     cout << "11. Process emergency cases." << endl;
     cout << "12. Exit." << endl;
 }
-
-
