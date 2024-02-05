@@ -544,6 +544,89 @@ void displayAppointmentSchedule(const queue<Appointment>& appointmentQueue) {
     }
 }
 
+void updateAppointment(queue<Appointment>& appointmentQueue) {
+    // Check if there are any appointments
+    if (appointmentQueue.empty()) {
+        cout << "There are no appointments to update." << endl;
+        return;
+    }
+
+    // Display the current appointment schedule
+    displayAppointmentSchedule(appointmentQueue);
+
+    // Ask the user for the appointment number to update
+    int appointmentNumber;
+    cout << "Enter the number of the appointment to update: ";
+    cin >> appointmentNumber;
+
+    // Check if the entered appointment number is valid
+    if (appointmentNumber < 1 || appointmentNumber > appointmentQueue.size()) {
+        cout << "Invalid appointment number. Please try again." << endl;
+        return;
+    }
+
+    // Find the appointment to update
+    queue<Appointment> tempQueue = appointmentQueue;
+    Appointment appointmentToUpdate;
+    for (int i = 1; i < appointmentNumber; ++i) {
+        tempQueue.pop();
+    }
+    appointmentToUpdate = tempQueue.front();
+
+    // Display the details of the selected appointment
+    cout << "Selected Appointment:" << endl;
+    cout << "Patient ID: " << appointmentToUpdate.patientId << endl;
+    cout << "Date: " << appointmentToUpdate.date << endl;
+    cout << "Time: " << appointmentToUpdate.time << endl;
+
+    // Ask the user for the new date and time
+    cout << "Enter the new date (dd/mm/yyyy): ";
+    cin >> appointmentToUpdate.date;
+    cout << "Enter the new time: ";
+    cin >> appointmentToUpdate.time;
+
+    // Update the appointment in the queue
+    appointmentQueue.pop();  // Remove the old appointment
+    appointmentQueue.push(appointmentToUpdate);  // Add the updated appointment
+
+    // Inform the user that the appointment has been updated
+    cout << "Appointment updated successfully." << endl;
+}
+
+//6. View and update appointments
+void viewAndUpdateAppointments(queue<Appointment>& appointmentQueue) {
+    int choice;
+    do {
+        cout << "\n---View and Update Appointments---" << endl;
+        cout << "1. View Appointment Schedule." << endl;
+        cout << "2. Update Appointment." << endl;
+        cout << "3. Cancel Appointment." << endl;
+        cout << "4. Back to Main Menu." << endl;
+        cout << "Your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                displayAppointmentSchedule(appointmentQueue); //display appointment schedule
+                break;
+            case 2:
+                updateAppointment(appointmentQueue); //update the appointment schedule
+                break;
+            case 3:
+                //cancelAppointment(appointmentQueue);
+                break;
+            case 4:
+                cout << "---Returning to Main Menu---" << endl;
+                break;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+                break;
+        }
+    } while (choice != 4);
+}
+
+
+
 // Linked list for appointments
 list<Appointment> appointmentList;
 
@@ -571,10 +654,10 @@ void schedulePatientAppointment();
 void viewAndUpdatePatientInformation();
 void sortPatientRecord();
 void searchForPatient();
-void viewAndUpdateAppointments();
+void viewAndUpdateAppointments(const queue<Appointment>& appointmentQueue); //
 void enterAndAccessMedicalRecords();
-void displayPatientRecord();
-void displayAppointmentSchedule(const queue<Appointment>& appointmentQueue);
+void displayPatientRecord(); //
+void displayAppointmentSchedule(const queue<Appointment>& appointmentQueue); //
 void addEmergencyCase();
 void processEmergencyCases();
 
@@ -638,7 +721,7 @@ int main() {
                 searchPatient();
                 break;
             case 6:
-                //viewAndUpdateAppointments();
+                viewAndUpdateAppointments(appointmentQueue);
                 break;
             case 7:
                 //enterAndAccessMedicalRecords();
