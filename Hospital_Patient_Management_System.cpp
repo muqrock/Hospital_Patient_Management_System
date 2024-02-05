@@ -759,7 +759,18 @@ void enterAndAccessMedicalRecords() {
     } while (choice != 3);
 }
 
+void displayEmergencyCases(EmergencyCase* head) {
+    if (!head) {
+        cout << "No emergency cases to display.\n";
+        return;
+    }
 
+    cout << "Emergency Cases:\n";
+    while (head) {
+        cout << "Patient: " << head->name << ", Description: " << head->description << ", Priority: " << head->priority << "\n";
+        head = head->next;
+    }
+}
 
 
 void addEmergencyCase(EmergencyCase*& head) {
@@ -791,6 +802,7 @@ void addEmergencyCase(EmergencyCase*& head) {
     }
 
     cout << "Emergency case added successfully.\n";
+    displayEmergencyCases(head);
 }
 
 void processEmergencyCases(EmergencyCase*& head) {
@@ -808,19 +820,6 @@ void processEmergencyCases(EmergencyCase*& head) {
     delete current;
 
     cout << "Emergency case processed successfully.\n";
-}
-
-void displayEmergencyCases(EmergencyCase* head) {
-    if (!head) {
-        cout << "No emergency cases to display.\n";
-        return;
-    }
-
-    cout << "Emergency Cases:\n";
-    while (head) {
-        cout << "Patient: " << head->name << ", Description: " << head->description << ", Priority: " << head->priority << "\n";
-        head = head->next;
-    }
 }
 
 
