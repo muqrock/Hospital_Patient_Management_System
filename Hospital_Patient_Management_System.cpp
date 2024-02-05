@@ -600,6 +600,55 @@ void updateAppointment(queue<Appointment>& appointmentQueue) {
     cout << "Appointment updated successfully." << endl;
 }
 
+void cancelAppointment(queue<Appointment>& appointmentQueue) {
+    cout << "\n---Cancel Appointment---\n";
+
+    // Check if there are any appointments to cancel
+    if (appointmentQueue.empty()) {
+        cout << "There are no scheduled appointments to cancel.\n";
+        return;
+    }
+
+    // Display the appointment schedule with sequential numbers
+    cout << "No. | Patient ID | Date       | Time\n";
+    cout << "----|------------|------------|-------\n";
+    int count = 1;
+    queue<Appointment> tempQueue = appointmentQueue;
+    while (!tempQueue.empty()) {
+        Appointment appointment = tempQueue.front();
+        tempQueue.pop();
+        cout << count++ << " | " << appointment.patientId << " | "
+             << appointment.date << " | " << appointment.time << endl;
+    }
+
+    // Prompt the user to enter the number of the appointment to cancel
+    int appointmentNumber;
+    cout << "Enter the number of the appointment to cancel: ";
+    cin >> appointmentNumber;
+
+    // Check if the entered number is valid
+    if (appointmentNumber < 1 || appointmentNumber > appointmentQueue.size()) {
+        cout << "Invalid appointment number.\n";
+        return;
+    }
+
+    // Remove the appointment from the queue based on the entered number
+    tempQueue = appointmentQueue;
+    appointmentQueue = queue<Appointment>();  // Clear the original queue
+    count = 1;
+    while (!tempQueue.empty()) {
+        if (count != appointmentNumber) {
+            appointmentQueue.push(tempQueue.front());
+        } else {
+            cout << "Appointment with Patient ID " << tempQueue.front().patientId
+                 << " on " << tempQueue.front().date << " at " << tempQueue.front().time
+                 << " has been canceled.\n";
+        }
+        tempQueue.pop();
+        count++;
+    }
+}
+
 //6. View and update appointments
 void viewAndUpdateAppointments(queue<Appointment>& appointmentQueue) {
     int choice;
@@ -620,7 +669,7 @@ void viewAndUpdateAppointments(queue<Appointment>& appointmentQueue) {
                 updateAppointment(appointmentQueue); //update the appointment schedule
                 break;
             case 3:
-                //cancelAppointment(appointmentQueue);
+                cancelAppointment(appointmentQueue);
                 break;
             case 4:
                 cout << "---Returning to Main Menu---" << endl;
