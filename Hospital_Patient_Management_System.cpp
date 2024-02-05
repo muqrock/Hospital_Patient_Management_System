@@ -81,6 +81,31 @@ void readPatientFile()
       cout << "!!!Error To Read Patient Record!!!\n";
 }
 
+//no 9 - read appointment from appointment.txt
+void loadAppointmentsFromFile(queue<Appointment>& appointmentQueue) {
+    ifstream infile("appointment.txt");
+    if (!infile.is_open()) {
+        cout << "Error: Unable to open appointment file.\n";
+        return;
+    }
+
+    string line;
+    while (getline(infile, line)) {
+        istringstream iss(line);
+        string patientID, date, time;
+        if (getline(iss, patientID, ',') &&
+            getline(iss, date, ',') &&
+            getline(iss, time)) {
+            Appointment appointment = {patientID, date, time};
+            appointmentQueue.push(appointment);
+        } else {
+            cout << "Error: Invalid appointment format.\n";
+        }
+    }
+
+    infile.close();
+}
+
 // No.1 Write the linked list to the file
 void writeListToFile()
    {
@@ -519,7 +544,6 @@ void displayAppointmentSchedule(const queue<Appointment>& appointmentQueue) {
     }
 }
 
-
 // Linked list for appointments
 list<Appointment> appointmentList;
 
@@ -557,7 +581,7 @@ void processEmergencyCases();
 int main() {
     // Load patient records from file into the linked list
     readPatientFile();
-    //loadAppointmentsFromFile();
+    loadAppointmentsFromFile(appointmentQueue);
     //loadMedicalRecordsFromFile();
 
     int choice;
